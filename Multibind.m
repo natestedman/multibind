@@ -15,7 +15,7 @@
 #import "Multibind.h"
 
 @interface MBBindingPair : NSObject
-@property (readwrite, weak) id object;
+@property (readwrite, unsafe_unretained) id object;
 @property (readwrite, strong) NSString* keyPath;
 @end
 
@@ -33,7 +33,7 @@ id MBPair(id object, NSString* keyPath)
 @interface MBBinding : NSObject
 {
 @private
-    __weak id object;
+    __unsafe_unretained id object;
     NSString* keyPath;
     NSArray* pairs;
     MBBlock block;
