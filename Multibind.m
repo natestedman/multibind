@@ -14,6 +14,43 @@
 #import <objc/runtime.h>
 #import "Multibind.h"
 
+@implementation MBArray
+
++(id)arrayWithValues:(id*)values count:(NSUInteger)count
+{
+    MBArray* array = [MBArray new];
+    
+    if (array)
+    {
+        array->count = count;
+        array->values = (__strong id*)calloc(count, sizeof(id));
+        
+        for (NSUInteger i = 0; i < count; i++)
+        {
+            array->values[i] = values[i];
+        }
+    }
+    
+    return array;
+}
+
+-(void)dealloc
+{
+    for (NSUInteger i = 0; i < count; i++)
+    {
+        values[i] = nil;
+    }
+    
+    free(values);
+}
+
+-(id)objectAtIndexedSubscript:(NSUInteger)subscript
+{
+    return values[subscript];
+}
+
+@end
+
 @interface MBBindingPair : NSObject
 @property (readwrite, unsafe_unretained) id object;
 @property (readwrite, strong) NSString* keyPath;
@@ -78,15 +115,15 @@ id MBPair(id object, NSString* keyPath)
 -(void)observeValueForKeyPath:(NSString*)path ofObject:(id)obj change:(NSDictionary*)change context:(void*)context
 {
     NSUInteger count = pairs.count;
-    id values[count];
+    __autoreleasing id values[count];
     
     for (NSUInteger i = 0; i < count; i++)
     {
         MBBindingPair* pair = [pairs objectAtIndex:i];
-        values[i] = [pair.object valueForKeyPath:pair.keyPath] ?: [NSNull null];
+        values[i] = [pair.object valueForKeyPath:pair.keyPath];
     }
     
-    NSArray* array = [NSArray arrayWithObjects:values count:count];
+    MBArray* array = [MBArray arrayWithValues:values count:count];
     [object setValue:block(array) forKeyPath:keyPath];
 }
 

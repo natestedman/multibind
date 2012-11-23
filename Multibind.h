@@ -13,7 +13,18 @@
 
 #import <Foundation/Foundation.h>
 
-typedef id(^MBBlock)(NSArray* values);
+@interface MBArray : NSObject
+{
+@private
+    NSUInteger count;
+    __strong id* values;
+}
+
+-(id)objectAtIndexedSubscript:(NSUInteger)subscript;
+
+@end
+
+typedef id(^MBBlock)(MBArray* values);
 
 FOUNDATION_EXTERN id MBPair(id object, NSString* keyPath);
 
