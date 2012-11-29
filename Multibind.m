@@ -57,6 +57,12 @@
 @end
 
 @implementation MBBindingPair
+
+-(NSString*)description
+{
+    return [[super description] stringByAppendingFormat:@" (%@ -> %@)", _object, _keyPath];
+}
+
 @end
 
 id MBPair(id object, NSString* keyPath)
