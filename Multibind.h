@@ -32,5 +32,6 @@ FOUNDATION_EXTERN id MBPair(id object, NSString* keyPath);
 
 -(void)mb_bind:(NSString*)keyPath toObjectAndKeyPathPairs:(NSArray*)pairs withBlock:(MBBlock)block;
 -(void)mb_unbind:(NSString*)keyPath;
+-(void)mb_unbindAll;
 
 @end

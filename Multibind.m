@@ -163,4 +163,9 @@ static char MBAssociatedKey;
     }
 }
 
+-(void)mb_unbindAll
+{
+    objc_setAssociatedObject(self, &MBAssociatedKey, nil, OBJC_ASSOCIATION_RETAIN);
+}
+
 @end
